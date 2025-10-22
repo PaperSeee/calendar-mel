@@ -43,18 +43,18 @@ export function MessagingTab({ currentUser, messages }: MessagingTabProps) {
     const text = messageText.trim()
     setMessageText("")
 
-    // Message optimiste (affiché immédiatement)
-    const optimisticMsg: Message = {
-      id: Date.now(), // ID temporaire
-      content: text,
-      sender: currentUser,
-      created_at: new Date().toISOString(),
-    }
-
-    addOptimisticMessage(optimisticMsg)
-    scrollToBottom()
-
     startTransition(async () => {
+      // Message optimiste (affiché immédiatement) - MAINTENANT DANS startTransition
+      const optimisticMsg: Message = {
+        id: Date.now(), // ID temporaire
+        content: text,
+        sender: currentUser,
+        created_at: new Date().toISOString(),
+      }
+
+      addOptimisticMessage(optimisticMsg)
+      scrollToBottom()
+
       await createMessage(text, currentUser)
       router.refresh()
     })
