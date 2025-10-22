@@ -24,7 +24,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  themeColor: "#8b5cf6",
+  themeColor: "#b89968", // Couleur beige/marron chaude au lieu du violet
 };
 
 export default function RootLayout({
@@ -39,7 +39,8 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="32x32" href="/icon-192.png" />
         <link rel="apple-touch-icon" href="/icon-192.png" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="theme-color" content="#b89968" />
       </head>
       <body className={inter.className}>
         {children}
