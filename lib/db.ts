@@ -1,6 +1,11 @@
 import { neon } from "@neondatabase/serverless"
 
-// Use the connection string from environment variables
-const sql = neon(process.env.NEON_POSTGRES_URL!)
+const connectionString = process.env.NEON_DATABASE_URL || process.env.DATABASE_URL
 
-export { sql }
+if (!connectionString) {
+  throw new Error(
+    "Database connection string is missing. Please set NEON_DATABASE_URL or DATABASE_URL environment variable."
+  )
+}
+
+export const sql = neon(connectionString)

@@ -19,11 +19,21 @@ export interface Event {
 }
 
 export async function getEvents(): Promise<Event[]> {
-  const events = await sql`
-    SELECT * FROM events 
-    ORDER BY date ASC, created_at DESC
-  `
-  return events as Event[]
+  // Pendant le build, retourner un tableau vide
+  if (process.env.NODE_ENV === 'production' && !process.env.NEON_DATABASE_URL && !process.env.DATABASE_URL) {
+    return []
+  }
+  
+  try {
+    const events = await sql`
+      SELECT * FROM events 
+      ORDER BY date ASC, created_at DESC
+    `
+    return events as Event[]
+  } catch (error) {
+    console.error('Failed to fetch events:', error)
+    return []
+  }
 }
 
 export async function createEvent(data: {
