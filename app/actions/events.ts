@@ -1,14 +1,12 @@
 "use server"
 
-import { neon } from "@neondatabase/serverless"
+import { sql } from "@/lib/db"
 import { revalidatePath } from "next/cache"
 
 console.log("[v0] Checking Neon env vars:", {
   NEON_NEON_DATABASE_URL: process.env.NEON_DATABASE_URL ? "exists" : "missing",
   NEON_POSTGRES_URL: process.env.NEON_POSTGRES_URL ? "exists" : "missing",
 })
-
-const sql = neon(process.env.NEON_POSTGRES_URL!)
 
 export interface Event {
   id: number

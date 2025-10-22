@@ -1,9 +1,6 @@
 "use server"
 
-import { neon } from "@neondatabase/serverless"
-import { revalidatePath } from "next/cache"
-
-const sql = neon(process.env.NEON_POSTGRES_URL!)
+import { sql } from "@/lib/db"
 
 export interface Message {
   id: number
