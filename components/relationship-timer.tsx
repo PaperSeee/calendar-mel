@@ -53,10 +53,12 @@ function calculateTimeElapsed(): TimeElapsed {
 
 export function RelationshipTimer() {
   const [timeElapsed, setTimeElapsed] = useState<TimeElapsed>(calculateTimeElapsed())
+  const [currentDate, setCurrentDate] = useState(new Date())
 
   useEffect(() => {
     const interval = setInterval(() => {
       setTimeElapsed(calculateTimeElapsed())
+      setCurrentDate(new Date())
     }, 1000)
 
     return () => clearInterval(interval)
@@ -153,6 +155,33 @@ export function RelationshipTimer() {
               <div className="flex-1 min-w-0">
                 <p className="font-semibold text-foreground">Notre amour grandit</p>
                 <p className="text-sm text-muted-foreground">Chaque seconde compte</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Nouvelle carte : Prochain anniversaire */}
+        <Card className="border-0 shadow-sm hover:shadow-md transition-shadow duration-200 bg-gradient-to-br from-primary/5 to-accent/5">
+          <CardContent className="p-5">
+            <div className="flex items-center gap-4">
+              <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center">
+                <Calendar className="w-6 h-6 text-primary" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="font-semibold text-foreground">Prochain anniversaire</p>
+                <p className="text-sm text-muted-foreground">
+                  {(() => {
+                    const nextAnniversary = new Date(RELATIONSHIP_START_DATE)
+                    nextAnniversary.setFullYear(currentDate.getFullYear())
+                    if (nextAnniversary < currentDate) {
+                      nextAnniversary.setFullYear(currentDate.getFullYear() + 1)
+                    }
+                    const daysUntil = Math.ceil(
+                      (nextAnniversary.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24)
+                    )
+                    return `Dans ${daysUntil} jours`
+                  })()}
+                </p>
               </div>
             </div>
           </CardContent>

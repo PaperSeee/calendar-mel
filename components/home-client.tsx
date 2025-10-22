@@ -7,6 +7,7 @@ import { MainLayout } from "@/components/main-layout"
 import { CalendarTab } from "@/components/calendar-tab"
 import { RelationshipTimer } from "@/components/relationship-timer"
 import { MessagingTab } from "@/components/messaging-tab"
+import { MyEventsTab } from "@/components/my-events-tab"
 import type { Event } from "@/app/actions/events"
 import type { Message } from "@/app/actions/messages"
 
@@ -17,7 +18,7 @@ interface HomeClientProps {
 
 export function HomeClient({ events, messages }: HomeClientProps) {
   const { user, selectUser, isLoading } = useCurrentUser()
-  const [activeTab, setActiveTab] = useState<"calendar" | "timer" | "messages">("calendar")
+  const [activeTab, setActiveTab] = useState<"calendar" | "timer" | "messages" | "events">("calendar")
 
   if (isLoading) {
     return (
@@ -38,6 +39,7 @@ export function HomeClient({ events, messages }: HomeClientProps) {
     <MainLayout currentUser={user} activeTab={activeTab} onTabChange={setActiveTab}>
       <div className="max-w-4xl mx-auto">
         {activeTab === "calendar" && <CalendarTab currentUser={user} events={events} />}
+        {activeTab === "events" && <MyEventsTab currentUser={user} events={events} />}
         {activeTab === "timer" && <RelationshipTimer />}
         {activeTab === "messages" && <MessagingTab currentUser={user} messages={messages} />}
       </div>

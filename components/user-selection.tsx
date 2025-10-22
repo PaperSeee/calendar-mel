@@ -17,7 +17,7 @@ export function UserSelection({ onSelectUser }: UserSelectionProps) {
             <Heart className="w-10 h-10 text-primary fill-primary" />
           </div>
           <div className="space-y-2">
-            <h1 className="text-4xl font-bold tracking-tight text-foreground">Notre Calendrier</h1>
+            <h1 className="text-4xl font-bold tracking-tight text-foreground">Calendar MI</h1>
             <p className="text-lg text-muted-foreground">Bienvenue ! Qui êtes-vous ?</p>
           </div>
         </div>

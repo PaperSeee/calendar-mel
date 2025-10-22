@@ -1,19 +1,20 @@
 "use client"
 
 import type { ReactNode } from "react"
-import { Calendar, Heart, MessageCircle } from "lucide-react"
+import { Calendar, Heart, MessageCircle, Sparkles } from "lucide-react"
 import type { User } from "@/lib/user-storage"
 
 interface MainLayoutProps {
   children: ReactNode
   currentUser: User
-  activeTab: "calendar" | "timer" | "messages"
-  onTabChange: (tab: "calendar" | "timer" | "messages") => void
+  activeTab: "calendar" | "timer" | "messages" | "events"
+  onTabChange: (tab: "calendar" | "timer" | "messages" | "events") => void
 }
 
 export function MainLayout({ children, currentUser, activeTab, onTabChange }: MainLayoutProps) {
   const tabs = [
     { id: "calendar" as const, label: "Calendrier", icon: Calendar },
+    { id: "events" as const, label: "Événements", icon: Sparkles },
     { id: "timer" as const, label: "Histoire", icon: Heart },
     { id: "messages" as const, label: "Messages", icon: MessageCircle },
   ]
@@ -27,7 +28,7 @@ export function MainLayout({ children, currentUser, activeTab, onTabChange }: Ma
               <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
                 <Heart className="w-5 h-5 text-primary fill-primary" />
               </div>
-              <h1 className="text-xl font-bold text-foreground">Notre Calendrier</h1>
+              <h1 className="text-xl font-bold text-foreground">Calendar MI</h1>
             </div>
             <div className="px-4 py-2 rounded-full bg-muted/50 text-sm font-medium text-foreground capitalize">
               {currentUser}
@@ -37,7 +38,7 @@ export function MainLayout({ children, currentUser, activeTab, onTabChange }: Ma
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 container mx-auto px-6 py-6">{children}</main>
+      <main className="flex-1 container mx-auto px-4 py-4">{children}</main>
 
       <nav className="bg-card/95 backdrop-blur-sm border-t border-border/50 sticky bottom-0 safe-area-inset-bottom">
         <div className="container mx-auto px-2">

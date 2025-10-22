@@ -96,35 +96,54 @@ export function CalendarView({ events, onDateSelect, selectedDate }: CalendarVie
   }
 
   return (
-    <div className="bg-white rounded-3xl p-6 shadow-sm border border-muted">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-bold text-foreground">
-          {monthNames[month]} {year}
-        </h2>
-        <div className="flex gap-2">
+    <div className="bg-gradient-to-br from-card via-card to-card/80 rounded-3xl p-5 shadow-lg border border-border/50">
+      <div className="flex items-center justify-between mb-4">
+        <div>
+          <h2 className="text-xl font-bold text-foreground">
+            {monthNames[month]} {year}
+          </h2>
+          <p className="text-xs text-muted-foreground mt-0.5">
+            {events.filter((e) => {
+              const eventDate = new Date(e.date)
+              return eventDate.getMonth() === month && eventDate.getFullYear() === year
+            }).length} événement{events.filter((e) => {
+              const eventDate = new Date(e.date)
+              return eventDate.getMonth() === month && eventDate.getFullYear() === year
+            }).length !== 1 ? "s" : ""} ce mois
+          </p>
+        </div>
+        <div className="flex gap-1.5">
           <Button
             variant="outline"
             size="icon"
             onClick={previousMonth}
-            className="rounded-full h-10 w-10 bg-transparent"
+            className="rounded-full h-9 w-9 hover:bg-primary/10 hover:border-primary/30 transition-all"
           >
-            <ChevronLeft className="w-5 h-5" />
+            <ChevronLeft className="w-4 h-4" />
           </Button>
-          <Button variant="outline" size="icon" onClick={nextMonth} className="rounded-full h-10 w-10 bg-transparent">
-            <ChevronRight className="w-5 h-5" />
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={nextMonth}
+            className="rounded-full h-9 w-9 hover:bg-primary/10 hover:border-primary/30 transition-all"
+          >
+            <ChevronRight className="w-4 h-4" />
           </Button>
         </div>
       </div>
 
-      <div className="grid grid-cols-7 gap-3 mb-3">
+      <div className="grid grid-cols-7 gap-1.5 mb-2">
         {dayNames.map((name) => (
-          <div key={name} className="text-center text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+          <div
+            key={name}
+            className="text-center text-[10px] font-bold text-muted-foreground uppercase tracking-wide py-1.5"
+          >
             {name}
           </div>
         ))}
       </div>
 
-      <div className="grid grid-cols-7 gap-3">{days}</div>
+      <div className="grid grid-cols-7 gap-1.5">{days}</div>
     </div>
   )
 }
