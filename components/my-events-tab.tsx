@@ -3,22 +3,30 @@
 import { useMemo, useState, useTransition } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Calendar, Clock, Trash2, User, ChevronRight, Sparkles, CalendarDays, CalendarClock, CalendarCheck } from "lucide-react"
+import { Calendar, Clock, Trash2, User, ChevronRight, Sparkles, CalendarDays, CalendarClock, CalendarCheck, Archive } from "lucide-react"
 import type { Event } from "@/app/actions/events"
 import { deleteEvent } from "@/app/actions/events"
 
 interface MyEventsTabProps {
   events: Event[]
+  currentUser: string
 }
 
-export function MyEventsTab({ events }: MyEventsTabProps) {
+export function MyEventsTab({ events, currentUser }: MyEventsTabProps) {
   const [isPending, startTransition] = useTransition()
   const [expandedPeriod, setExpandedPeriod] = useState<string>("today")
+  const [selectedDate, setSelectedDate] = useState<string | null>(null)
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
 
   const handleDelete = (id: number) => {
     startTransition(async () => {
       await deleteEvent(id)
     })
+  }
+
+  const handleDateSelect = (date: string) => {
+    setSelectedDate(date)
+    setIsDialogOpen(true)
   }
 
   // Organiser les événements par période
@@ -111,6 +119,12 @@ export function MyEventsTab({ events }: MyEventsTabProps) {
                 <Calendar className="w-3.5 h-3.5" />
                 <span>{formatEventDate(event.date)}</span>
               </div>
+              {event.time && (
+                <div className="flex items-center gap-1.5">
+                  <Clock className="w-3.5 h-3.5" />
+                  <span>{event.time}</span>
+                </div>
+              )}
               <div className="flex items-center gap-1.5">
                 <User className="w-3.5 h-3.5" />
                 <span className="capitalize">{event.created_by}</span>
@@ -150,7 +164,8 @@ export function MyEventsTab({ events }: MyEventsTabProps) {
       primary: "from-primary/10 to-primary/5 text-primary border-primary/20",
       accent: "from-accent/10 to-accent/5 text-accent border-accent/20",
       secondary: "from-secondary/10 to-secondary/5 text-secondary border-secondary/20",
-      muted: "from-muted/10 to-muted/5 text-muted-foreground border-muted/20"
+      muted: "from-muted/10 to-muted/5 text-muted-foreground border-muted/20",
+      archive: "from-muted/20 to-muted/10 text-muted-foreground border-muted/30"
     }
 
     if (periodEvents.length === 0) return null
@@ -210,17 +225,18 @@ export function MyEventsTab({ events }: MyEventsTabProps) {
           </CardContent>
         </Card>
 
-        <Card className="border-0 shadow-sm bg-gradient-to-br from-secondary/5 to-secondary/10">
+        <Card className="border-0 shadow-sm bg-gradient-to-br from-muted/10 to-muted/20">
           <CardContent className="p-4 text-center">
-            <CalendarDays className="w-8 h-8 text-secondary mx-auto mb-2" />
-            <p className="text-2xl font-bold text-secondary">{organizedEvents.past.length}</p>
-            <p className="text-xs text-muted-foreground">Passés</p>
+            <Archive className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
+            <p className="text-2xl font-bold text-muted-foreground">{organizedEvents.past.length}</p>
+            <p className="text-xs text-muted-foreground">Archivés</p>
           </CardContent>
         </Card>
       </div>
 
-      {/* Sections temporelles */}
+      {/* Affichage selon la vue */}
       <div className="space-y-4">
+        {/* Sections temporelles */}
         <PeriodSection
           title="Aujourd'hui"
           icon={Clock}
@@ -252,6 +268,15 @@ export function MyEventsTab({ events }: MyEventsTabProps) {
           periodKey="later"
           color="muted"
         />
+
+        {/* Section Archives */}
+        <PeriodSection
+          title="Archives"
+          icon={Archive}
+          events={organizedEvents.past}
+          periodKey="past"
+          color="archive"
+        />
       </div>
 
       {/* Message si aucun événement */}
@@ -269,6 +294,16 @@ export function MyEventsTab({ events }: MyEventsTabProps) {
             </p>
           </CardContent>
         </Card>
+      )}
+
+      {selectedDate && (
+        <EventDialog
+          isOpen={isDialogOpen}
+          onClose={() => setIsDialogOpen(false)}
+          selectedDate={selectedDate}
+          currentUser={currentUser}
+          events={events}
+        />
       )}
     </div>
   )

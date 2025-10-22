@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
-import { Trash2, Plus, X, Sparkles, User, Calendar as CalendarIcon } from "lucide-react"
+import { Trash2, Plus, X, Sparkles, User, Calendar as CalendarIcon, Clock } from "lucide-react"
 import { createEvent, deleteEvent, type Event } from "@/app/actions/events"
 
 interface EventDialogProps {
@@ -21,6 +21,7 @@ export function EventDialog({ isOpen, onClose, selectedDate, currentUser, events
   const [showForm, setShowForm] = useState(false)
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
+  const [time, setTime] = useState("")
   const [isPending, startTransition] = useTransition()
 
   const dayEvents = events.filter((e) => e.date === selectedDate)
@@ -54,10 +55,12 @@ export function EventDialog({ isOpen, onClose, selectedDate, currentUser, events
         title: title.trim(),
         description: description.trim() || undefined,
         date: selectedDate,
+        time: time || undefined,
         createdBy: currentUser,
       })
       setTitle("")
       setDescription("")
+      setTime("")
       setShowForm(false)
     })
   }
@@ -129,6 +132,21 @@ export function EventDialog({ isOpen, onClose, selectedDate, currentUser, events
                 </div>
 
                 <div className="space-y-2">
+                  <Label htmlFor="time" className="text-sm font-semibold flex items-center gap-2">
+                    <Clock className="w-4 h-4 text-primary" />
+                    Horaire (optionnel)
+                  </Label>
+                  <Input
+                    id="time"
+                    type="time"
+                    value={time}
+                    onChange={(e) => setTime(e.target.value)}
+                    className="rounded-xl h-11 border-primary/20 focus:border-primary"
+                    disabled={isPending}
+                  />
+                </div>
+
+                <div className="space-y-2">
                   <Label htmlFor="description" className="text-sm font-semibold">
                     Description (optionnel)
                   </Label>
@@ -179,6 +197,14 @@ export function EventDialog({ isOpen, onClose, selectedDate, currentUser, events
                     
                     <div className="flex-1 min-w-0">
                       <h4 className="font-bold text-base text-foreground mb-1 truncate">{event.title}</h4>
+                      
+                      {event.time && (
+                        <div className="flex items-center gap-1.5 mb-2">
+                          <Clock className="w-3.5 h-3.5 text-muted-foreground" />
+                          <span className="text-sm text-muted-foreground font-medium">{event.time}</span>
+                        </div>
+                      )}
+                      
                       {event.description && (
                         <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2 mb-2">
                           {event.description}

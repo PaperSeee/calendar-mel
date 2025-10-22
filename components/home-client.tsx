@@ -39,7 +39,7 @@ export function HomeClient({ events, messages }: HomeClientProps) {
     <MainLayout currentUser={user} activeTab={activeTab} onTabChange={setActiveTab}>
       <div className="max-w-4xl mx-auto">
         {activeTab === "calendar" && <CalendarTab currentUser={user} events={events} />}
-        {activeTab === "events" && <MyEventsTab currentUser={user} events={events} />}
+        {activeTab === "events" && <MyEventsTab events={events} currentUser={user} />}
         {activeTab === "timer" && <RelationshipTimer />}
         {activeTab === "messages" && <MessagingTab currentUser={user} messages={messages} />}
       </div>
