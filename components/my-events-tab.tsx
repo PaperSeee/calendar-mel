@@ -40,9 +40,20 @@ export function MyEventsTab({ events, currentUser }: MyEventsTabProps) {
     const monthEnd = new Date(today)
     monthEnd.setMonth(monthEnd.getMonth() + 1)
 
-    // Trier les événements par date (chaîne de caractères)
+    // Fonction pour convertir string date en Date locale
+    const parseLocalDate = (dateString: string | Date) => {
+      // Si c'est déjà une Date, la retourner
+      if (dateString instanceof Date) return dateString
+      
+      // Si ce n'est pas une string, retourner une date invalide
+      if (typeof dateString !== 'string') return new Date('invalid')
+      
+      const [year, month, day] = dateString.split('-').map(Number)
+      return new Date(year, month - 1, day)
+    }
+
+    // Trier les événements par date
     const sortedEvents = [...events].sort((a, b) => {
-      // S'assurer que date est une chaîne de caractères
       const dateA = typeof a.date === 'string' ? a.date : ''
       const dateB = typeof b.date === 'string' ? b.date : ''
       return dateA.localeCompare(dateB)
@@ -50,30 +61,40 @@ export function MyEventsTab({ events, currentUser }: MyEventsTabProps) {
 
     return {
       today: sortedEvents.filter(e => {
-        const eventDate = new Date(e.date)
+        const eventDate = parseLocalDate(e.date)
         return eventDate >= today && eventDate < tomorrow
       }),
       thisWeek: sortedEvents.filter(e => {
-        const eventDate = new Date(e.date)
+        const eventDate = parseLocalDate(e.date)
         return eventDate >= tomorrow && eventDate < weekEnd
       }),
       thisMonth: sortedEvents.filter(e => {
-        const eventDate = new Date(e.date)
+        const eventDate = parseLocalDate(e.date)
         return eventDate >= weekEnd && eventDate < monthEnd
       }),
       later: sortedEvents.filter(e => {
-        const eventDate = new Date(e.date)
+        const eventDate = parseLocalDate(e.date)
         return eventDate >= monthEnd
       }),
       past: sortedEvents.filter(e => {
-        const eventDate = new Date(e.date)
+        const eventDate = parseLocalDate(e.date)
         return eventDate < today
       })
     }
   }, [events])
 
-  const formatEventDate = (dateString: string) => {
-    const date = new Date(dateString)
+  const formatEventDate = (dateString: string | Date) => {
+    // Gérer le cas où c'est déjà une Date
+    let date: Date
+    if (dateString instanceof Date) {
+      date = dateString
+    } else if (typeof dateString === 'string') {
+      const [year, month, day] = dateString.split('-').map(Number)
+      date = new Date(year, month - 1, day)
+    } else {
+      return ''
+    }
+
     const now = new Date()
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
     const tomorrow = new Date(today)

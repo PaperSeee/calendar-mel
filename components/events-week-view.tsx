@@ -43,7 +43,11 @@ export function EventsWeekView({ events }: EventsWeekViewProps) {
   }
 
   const getDateString = (date: Date) => {
-    return date.toISOString().split("T")[0]
+    // Utiliser la date locale sans conversion UTC
+    const yyyy = date.getFullYear()
+    const mm = String(date.getMonth() + 1).padStart(2, '0')
+    const dd = String(date.getDate()).padStart(2, '0')
+    return `${yyyy}-${mm}-${dd}`
   }
 
   const getEventsForDate = (date: Date) => {

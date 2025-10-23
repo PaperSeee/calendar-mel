@@ -6,8 +6,9 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
-import { Trash2, Plus, X, Sparkles, User, Calendar as CalendarIcon, Clock } from "lucide-react"
+import { Trash2, Plus, X, Sparkles, User, Calendar as CalendarIcon, Clock, Check } from "lucide-react"
 import { createEvent, deleteEvent, type Event } from "@/app/actions/events"
+import { toast } from "sonner"
 
 interface EventDialogProps {
   isOpen: boolean
@@ -50,24 +51,52 @@ export function EventDialog({ isOpen, onClose, selectedDate, currentUser, events
     e.preventDefault()
     if (!title.trim()) return
 
+    const eventTitle = title.trim()
+
     startTransition(async () => {
-      await createEvent({
-        title: title.trim(),
-        description: description.trim() || undefined,
-        date: selectedDate,
-        time: time || undefined,
-        createdBy: currentUser,
-      })
-      setTitle("")
-      setDescription("")
-      setTime("")
-      setShowForm(false)
+      try {
+        await createEvent({
+          title: eventTitle,
+          description: description.trim() || undefined,
+          date: selectedDate,
+          time: time || undefined,
+          createdBy: currentUser,
+        })
+        
+        // Afficher un toast de succès
+        toast.success("Événement créé !", {
+          description: `"${eventTitle}" a été ajouté avec succès.`,
+          icon: <Check className="w-4 h-4" />,
+          duration: 3000,
+        })
+        
+        // Réinitialiser le formulaire mais le garder ouvert
+        setTitle("")
+        setDescription("")
+        setTime("")
+      } catch (error) {
+        toast.error("Erreur", {
+          description: "Impossible de créer l'événement.",
+          duration: 3000,
+        })
+      }
     })
   }
 
-  const handleDelete = (id: number) => {
+  const handleDelete = (id: number, eventTitle: string) => {
     startTransition(async () => {
-      await deleteEvent(id)
+      try {
+        await deleteEvent(id)
+        toast.success("Événement supprimé", {
+          description: `"${eventTitle}" a été supprimé.`,
+          duration: 3000,
+        })
+      } catch (error) {
+        toast.error("Erreur", {
+          description: "Impossible de supprimer l'événement.",
+          duration: 3000,
+        })
+      }
     })
   }
 
@@ -219,7 +248,7 @@ export function EventDialog({ isOpen, onClose, selectedDate, currentUser, events
                     <Button
                       variant="ghost"
                       size="icon"
-                      onClick={() => handleDelete(event.id)}
+                      onClick={() => handleDelete(event.id, event.title)}
                       className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-xl h-9 w-9 flex-shrink-0 transition-all duration-200"
                       disabled={isPending}
                     >
