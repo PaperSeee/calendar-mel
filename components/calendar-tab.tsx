@@ -68,22 +68,23 @@ export function CalendarTab({ currentUser, events }: CalendarTabProps) {
 
   return (
     <>
-      {/* Date et heure actuelles */}
-      <Card className="border-0 shadow-md bg-gradient-to-r from-primary/10 via-accent/10 to-secondary/10 mb-4">
-        <CardContent className="p-5">
+      {/* Date et heure actuelles - Design moderne */}
+      <Card className="border border-border/60 shadow-lg bg-gradient-to-br from-card via-card to-card/95 mb-6 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5" />
+        <CardContent className="p-6 relative">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-xl bg-white/50 flex items-center justify-center">
-                <Calendar className="w-6 h-6 text-primary" />
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/15 to-accent/10 flex items-center justify-center shadow-sm">
+                <Calendar className="w-7 h-7 text-primary" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Aujourd'hui</p>
-                <p className="font-bold text-foreground capitalize">{formatCurrentDate()}</p>
+                <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider mb-0.5">Aujourd'hui</p>
+                <p className="text-lg font-bold text-foreground capitalize tracking-tight">{formatCurrentDate()}</p>
               </div>
             </div>
-            <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/50">
+            <div className="flex items-center gap-2.5 px-5 py-2.5 rounded-2xl bg-gradient-to-r from-primary/10 to-accent/5 border border-primary/20 shadow-sm">
               <Clock className="w-4 h-4 text-primary" />
-              <p className="font-mono font-bold text-primary tabular-nums">{formatCurrentTime()}</p>
+              <p className="font-mono font-bold text-primary tabular-nums text-lg">{formatCurrentTime()}</p>
             </div>
           </div>
         </CardContent>
@@ -97,50 +98,55 @@ export function CalendarTab({ currentUser, events }: CalendarTabProps) {
       />
 
       {/* Statistiques et événements à venir */}
-      <div className="grid gap-4 mt-6">
-        {/* Statistiques */}
+      <div className="grid gap-5 mt-6">
+        {/* Statistiques - Design fintech */}
         <div className="grid grid-cols-3 gap-3">
-          <Card className="border-0 shadow-sm">
-            <CardContent className="p-4 text-center">
-              <div className="w-10 h-10 rounded-xl bg-primary/10 mx-auto mb-2 flex items-center justify-center">
-                <Sparkles className="w-5 h-5 text-primary" />
+          <Card className="border border-border/60 shadow-md hover:shadow-lg transition-all duration-300 group overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            <CardContent className="p-5 text-center relative">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary/15 to-primary/5 mx-auto mb-3 flex items-center justify-center shadow-sm">
+                <Sparkles className="w-6 h-6 text-primary" />
               </div>
-              <p className="text-2xl font-bold text-primary">{totalEvents}</p>
-              <p className="text-xs text-muted-foreground">Total</p>
+              <p className="text-3xl font-bold text-primary mb-1 tracking-tight">{totalEvents}</p>
+              <p className="text-[11px] text-muted-foreground font-semibold uppercase tracking-wider">Total</p>
             </CardContent>
           </Card>
 
-          <Card className="border-0 shadow-sm">
-            <CardContent className="p-4 text-center">
-              <div className="w-10 h-10 rounded-xl bg-accent/10 mx-auto mb-2 flex items-center justify-center">
-                <Heart className="w-5 h-5 text-accent" />
+          <Card className="border border-border/60 shadow-md hover:shadow-lg transition-all duration-300 group overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            <CardContent className="p-5 text-center relative">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-accent/15 to-accent/5 mx-auto mb-3 flex items-center justify-center shadow-sm">
+                <Heart className="w-6 h-6 text-accent" />
               </div>
-              <p className="text-2xl font-bold text-accent">{iliasEvents}</p>
-              <p className="text-xs text-muted-foreground">Ilias</p>
+              <p className="text-3xl font-bold text-accent mb-1 tracking-tight">{iliasEvents}</p>
+              <p className="text-[11px] text-muted-foreground font-semibold uppercase tracking-wider">Ilias</p>
             </CardContent>
           </Card>
 
-          <Card className="border-0 shadow-sm">
-            <CardContent className="p-4 text-center">
-              <div className="w-10 h-10 rounded-xl bg-secondary/10 mx-auto mb-2 flex items-center justify-center">
-                <Heart className="w-5 h-5 text-secondary" />
+          <Card className="border border-border/60 shadow-md hover:shadow-lg transition-all duration-300 group overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-secondary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            <CardContent className="p-5 text-center relative">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-secondary/15 to-secondary/5 mx-auto mb-3 flex items-center justify-center shadow-sm">
+                <Heart className="w-6 h-6 text-secondary" />
               </div>
-              <p className="text-2xl font-bold text-secondary">{melissaEvents}</p>
-              <p className="text-xs text-muted-foreground">Melissa</p>
+              <p className="text-3xl font-bold text-secondary mb-1 tracking-tight">{melissaEvents}</p>
+              <p className="text-[11px] text-muted-foreground font-semibold uppercase tracking-wider">Melissa</p>
             </CardContent>
           </Card>
         </div>
 
-        {/* Événements à venir */}
+        {/* Événements à venir - Design épuré */}
         {upcomingEvents.length > 0 && (
-          <Card className="border-0 shadow-sm">
-            <CardContent className="p-5">
-              <div className="flex items-center gap-2 mb-4">
-                <Calendar className="w-5 h-5 text-primary" />
-                <h3 className="font-semibold text-foreground">Prochains événements</h3>
+          <Card className="border border-border/60 shadow-md overflow-hidden">
+            <CardContent className="p-6">
+              <div className="flex items-center gap-2.5 mb-5">
+                <div className="w-8 h-8 rounded-xl bg-primary/10 flex items-center justify-center">
+                  <Calendar className="w-4 h-4 text-primary" />
+                </div>
+                <h3 className="font-bold text-foreground tracking-tight">Prochains événements</h3>
               </div>
               <div className="space-y-3">
-                {upcomingEvents.map((event) => {
+                {upcomingEvents.map((event, index) => {
                   const eventDate = new Date(event.date)
                   const today = new Date()
                   const isToday = eventDate.toDateString() === today.toDateString()
@@ -158,21 +164,23 @@ export function CalendarTab({ currentUser, events }: CalendarTabProps) {
                   return (
                     <div
                       key={event.id}
-                      className="flex items-start gap-3 p-3 rounded-xl bg-muted/30 hover:bg-muted/50 transition-colors cursor-pointer"
                       onClick={() => {
                         setSelectedDate(event.date)
                         setIsDialogOpen(true)
                       }}
+                      style={{ animationDelay: `${index * 50}ms` }}
+                      className="flex items-start gap-4 p-4 rounded-2xl bg-gradient-to-r from-muted/40 to-muted/20 hover:from-muted/60 hover:to-muted/30 border border-border/40 transition-all duration-300 cursor-pointer hover:shadow-md group animate-[fadeInUp_0.4s_ease-out_forwards]"
                     >
-                      <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center flex-shrink-0">
-                        <Sparkles className="w-5 h-5 text-primary" />
+                      <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/15 to-accent/10 flex items-center justify-center flex-shrink-0 shadow-sm group-hover:scale-105 transition-transform">
+                        <Sparkles className="w-6 h-6 text-primary" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="font-semibold text-sm text-foreground truncate">
+                        <p className="font-bold text-sm text-foreground truncate mb-1">
                           {event.title}
                         </p>
-                        <p className="text-xs text-muted-foreground">{dateLabel}</p>
+                        <p className="text-xs text-muted-foreground font-medium">{dateLabel}</p>
                       </div>
+                      <ChevronRight className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
                     </div>
                   )
                 })}

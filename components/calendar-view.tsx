@@ -13,6 +13,7 @@ interface CalendarViewProps {
 
 export function CalendarView({ events, onDateSelect, selectedDate }: CalendarViewProps) {
   const [currentDate, setCurrentDate] = useState(new Date())
+  const [eventsViewMonth, setEventsViewMonth] = useState(new Date())
 
   const year = currentDate.getFullYear()
   const month = currentDate.getMonth()
@@ -103,18 +104,30 @@ export function CalendarView({ events, onDateSelect, selectedDate }: CalendarVie
     )
   }
 
-  // Événements du mois actuel
+  // Événements du mois sélectionné pour la liste
+  const eventsMonth = eventsViewMonth.getMonth()
+  const eventsYear = eventsViewMonth.getFullYear()
+  
   const monthEvents = events.filter((e) => {
     const eventDate = new Date(e.date)
-    return eventDate.getMonth() === month && eventDate.getFullYear() === year
+    return eventDate.getMonth() === eventsMonth && eventDate.getFullYear() === eventsYear
   }).sort((a, b) => {
     const dateA = typeof a.date === 'string' ? a.date : ''
     const dateB = typeof b.date === 'string' ? b.date : ''
     return dateA.localeCompare(dateB)
   })
 
+  const previousEventsMonth = () => {
+    setEventsViewMonth(new Date(eventsYear, eventsMonth - 1, 1))
+  }
+
+  const nextEventsMonth = () => {
+    setEventsViewMonth(new Date(eventsYear, eventsMonth + 1, 1))
+  }
+
   return (
     <div className="space-y-4">
+      {/* Calendrier existant */}
       <div className="bg-gradient-to-br from-card via-card to-card/80 rounded-3xl p-5 shadow-lg border border-border/50">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -165,13 +178,40 @@ export function CalendarView({ events, onDateSelect, selectedDate }: CalendarVie
         <div className="grid grid-cols-7 gap-1.5">{days}</div>
       </div>
 
-      {/* Liste des événements du mois */}
-      {monthEvents.length > 0 && (
-        <div className="bg-gradient-to-br from-card via-card to-card/80 rounded-3xl p-5 shadow-lg border border-border/50">
-          <h3 className="font-semibold text-foreground mb-4 flex items-center gap-2">
+      {/* Liste des événements du mois avec navigation */}
+      <div className="bg-gradient-to-br from-card via-card to-card/80 rounded-3xl p-5 shadow-lg border border-border/50">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="font-semibold text-foreground flex items-center gap-2">
             <Calendar className="w-4 h-4 text-primary" />
-            Événements de {monthNames[month]} ({monthEvents.length})
+            Événements de {monthNames[eventsMonth]} {eventsYear} ({monthEvents.length})
           </h3>
+          <div className="flex gap-1.5">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={previousEventsMonth}
+              className="rounded-full h-8 w-8 hover:bg-primary/10 hover:border-primary/30 transition-all"
+            >
+              <ChevronLeft className="w-3.5 h-3.5" />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={nextEventsMonth}
+              className="rounded-full h-8 w-8 hover:bg-primary/10 hover:border-primary/30 transition-all"
+            >
+              <ChevronRight className="w-3.5 h-3.5" />
+            </Button>
+          </div>
+        </div>
+        
+        {monthEvents.length === 0 ? (
+          <div className="text-center py-8">
+            <p className="text-sm text-muted-foreground">
+              Aucun événement en {monthNames[eventsMonth]} {eventsYear}
+            </p>
+          </div>
+        ) : (
           <div className="space-y-2 max-h-[400px] overflow-y-auto">
             {monthEvents.map((event) => {
               const eventDate = new Date(event.date)
@@ -226,8 +266,8 @@ export function CalendarView({ events, onDateSelect, selectedDate }: CalendarVie
               )
             })}
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   )
 }

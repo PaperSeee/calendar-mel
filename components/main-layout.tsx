@@ -20,17 +20,21 @@ export function MainLayout({ children, currentUser, activeTab, onTabChange }: Ma
   ]
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
-      <header className="bg-card/80 backdrop-blur-sm border-b border-border/50 sticky top-0 z-10">
+    <div className="min-h-screen flex flex-col bg-muted/30">
+      {/* Header moderne */}
+      <header className="bg-card/95 backdrop-blur-xl border-b border-border/60 sticky top-0 z-50 shadow-sm">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                <Heart className="w-5 h-5 text-primary fill-primary" />
+              <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-sm">
+                <Heart className="w-5 h-5 text-white fill-white" />
               </div>
-              <h1 className="text-xl font-bold text-foreground">Calendar MI</h1>
+              <div>
+                <h1 className="text-xl font-bold text-foreground tracking-tight">Calendar MI</h1>
+                <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider">Notre histoire</p>
+              </div>
             </div>
-            <div className="px-4 py-2 rounded-full bg-muted/50 text-sm font-medium text-foreground capitalize">
+            <div className="px-4 py-2 rounded-full bg-gradient-to-r from-muted to-muted/50 text-sm font-semibold text-foreground capitalize shadow-sm border border-border/50">
               {currentUser}
             </div>
           </div>
@@ -38,11 +42,12 @@ export function MainLayout({ children, currentUser, activeTab, onTabChange }: Ma
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 container mx-auto px-4 py-4">{children}</main>
+      <main className="flex-1 container mx-auto px-4 py-6">{children}</main>
 
-      <nav className="bg-card/95 backdrop-blur-sm border-t border-border/50 sticky bottom-0 safe-area-inset-bottom">
-        <div className="container mx-auto px-2">
-          <div className="flex justify-around items-center">
+      {/* Navigation moderne */}
+      <nav className="bg-card/98 backdrop-blur-xl border-t border-border/60 sticky bottom-0 safe-area-inset-bottom shadow-lg">
+        <div className="container mx-auto px-3 py-2">
+          <div className="flex justify-around items-center gap-1">
             {tabs.map((tab) => {
               const Icon = tab.icon
               const isActive = activeTab === tab.id
@@ -50,17 +55,20 @@ export function MainLayout({ children, currentUser, activeTab, onTabChange }: Ma
                 <button
                   key={tab.id}
                   onClick={() => onTabChange(tab.id)}
-                  className={`flex-1 flex flex-col items-center gap-1.5 py-3 px-2 transition-all duration-200 ${
-                    isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"
-                  }`}
+                  className={`
+                    flex-1 flex flex-col items-center gap-1 py-2.5 px-3 rounded-2xl transition-all duration-300
+                    ${isActive
+                      ? "bg-primary/10 text-primary"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
+                    }
+                  `}
                 >
-                  <div className={`relative ${isActive ? "scale-110" : ""} transition-transform duration-200`}>
-                    <Icon className={`w-5 h-5 ${isActive ? "fill-primary" : ""}`} />
-                    {isActive && (
-                      <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary" />
-                    )}
+                  <div className={`relative transition-all duration-300 ${isActive ? "scale-110" : "scale-100"}`}>
+                    <Icon className={`w-5 h-5 ${isActive ? "fill-primary/20" : ""}`} strokeWidth={isActive ? 2.5 : 2} />
                   </div>
-                  <span className={`text-xs font-medium ${isActive ? "font-semibold" : ""}`}>{tab.label}</span>
+                  <span className={`text-[11px] font-semibold tracking-tight ${isActive ? "" : "font-medium"}`}>
+                    {tab.label}
+                  </span>
                 </button>
               )
             })}
